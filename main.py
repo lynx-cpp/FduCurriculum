@@ -71,6 +71,7 @@ for i in range(len(argv)):
 if outputFile=="":
     pos = inputFile.rfind('.')
     if (pos>=0):
+        print "dot found"
         outputFile = inputFile[:pos + 1] + 'ics';
     else:
         outputFile = inputFile + '.ics';
@@ -122,13 +123,13 @@ cur = fin.readline();
 while cur!="":
     if cur.find("index=")!=-1 and fin.readline().find("arranges[index]=new TimeUnit();")!=-1:
         cur = fin.readline();
-        week = int(cur[cur.find("week=") + 5:-3])
+        week = int(cur[cur.find("week=") + 5: cur.find(";")])
         cur = fin.readline();
-        startUnit = int(cur[cur.find("Unit=") + 5:-3])
+        startUnit = int(cur[cur.find("Unit=") + 5: cur.find(";")])
         cur = fin.readline();
-        units = int(cur[cur.find("nits=") + 5:-3])
+        units = int(cur[cur.find("nits=") + 5: cur.find(";")])
         cur = fin.readline();
-        content = cur[cur.find("ent='") + 5:-3]
+        content = cur[cur.find("ent='") + 5: cur.find(";") ]
 
         weekDelta = timedelta(days=week - 1)
 
@@ -139,9 +140,9 @@ while cur!="":
         fout.write("DTSTAMP%sZ\n"%(today))
         #fout,write("UID")
         fout.write("CREATED:%sZ\n"%(today))
-        fout.write("DESCRIPTION:%s\n"%(content[:content.find("<br/>")].replace("<br>"," ")))
+        fout.write("DESCRIPTION:%s\n"%(content[:content.find("<br/>")]))
         fout.write("LAST-MODIFIED:%sZ\n"%(today))
-        fout.write("LOCATION:%s\n"%(content[content.find("<br/>"):].replace("<br>","").replace("<br/>"," ")))
+        fout.write("LOCATION:%s\n"%(content[content.find("<br>"):]))
         fout.write("SEQUENCE:%d\n"%(0))
         fout.write("STATUS:CONFIRMED\n")
         fout.write("SUMMARY:%s\n"%(content[content.find("<br>") + 4:content.find("<br/>")]))
